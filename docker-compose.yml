@@ -1,0 +1,59 @@
+services:
+  mysql:
+    container_name: mysql
+    build:
+      context: ./mysql
+      args:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/mysql-data:/var/lib/mysql
+    networks:
+      - spring-microservice
+
+  department-service:
+    container_name: department_service
+    build:
+      context: ./department_service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    #    depends_on:
+    #      - mysql
+    networks:
+      - spring-microservice
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/microservice?createDatabaseIfNotExist=true&characterEncoding=UTF-8&serverTimeZone=UTC
+      SPRING_DATASOURCE_USERNAME: vanben277
+      SPRING_DATASOURCE_PASSWORD: 123456
+      SPRING_APPLICATION_NAME: department_service
+      EUREKA_CLIENT_ENABLED: "false"
+      TOKEN_SECRET: ${TOKEN_SECRET}
+
+  account-service:
+    build:
+      context: ./account_service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    #    depends_on:
+    #      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/microservice?createDatabaseIfNotExist=true&characterEncoding=UTF-8&serverTimeZone=UTC
+      SPRING_DATASOURCE_USERNAME: vanben277
+      SPRING_DATASOURCE_PASSWORD: 123456
+      SPRING_APPLICATION_NAME: account_service
+      TOKEN_SECRET: ${TOKEN_SECRET}
+      EUREKA_CLIENT_ENABLED: "false"
+    networks:
+      - spring-microservice
+
+networks:
+  spring-microservice:
+    driver: bridge
