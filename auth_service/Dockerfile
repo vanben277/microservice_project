@@ -7,9 +7,9 @@ LABEL authors="vanben277"
 WORKDIR /app
 
 # Sao chép file JAR vào thư mục làm việc trong container
-COPY target/account_service-0.0.1-SNAPSHOT.jar /app/account_service-0.0.1-SNAPSHOT.jar
+COPY target/auth_service-0.0.1-SNAPSHOT.jar /app/auth_service-0.0.1-SNAPSHOT.jar
 
-EXPOSE 8080
+EXPOSE 8083
 
 # Chạy ứng dụng khi container khởi động
-ENTRYPOINT ["java", "-jar", "/app/account_service-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/app/auth_service-0.0.1-SNAPSHOT.jar"]
