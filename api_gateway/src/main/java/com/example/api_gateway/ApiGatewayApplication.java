@@ -1,15 +1,16 @@
-package com.example.auth_service;
+package com.example.api_gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
+
 @SpringBootApplication
 @EnableDiscoveryClient
-public class AuthServiceApplication {
+public class ApiGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthServiceApplication.class, args);
+        SpringApplication.run(ApiGatewayApplication.class, args);
     }
 
 }
